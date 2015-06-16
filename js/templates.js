@@ -12,8 +12,11 @@ ${array.map((obj) => `<a href="#details/${obj.listing_id}">
     <div>
     `
 
-export var detailedView = (obj) => `
-	<div>${obj.title}
+export var detailedView = (obj) => `<div class='detailed'>
+	<div class='item'>${obj.title}
 	<div>${obj.Images.map((obj) => `<img src=${obj.url_570xN}></img>`).join(' ')}</div>
 	${obj.description}
+	</div>
+	<div class='shop'></div>
+	<button class='left'></button><button class='right'></button>
 	</div>`

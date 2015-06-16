@@ -1,42 +1,41 @@
 "use strict";
 require("es5-shim")
 require("babel/register")
+var $ = require('jquery')
 var backbone = require('backbone')
 var Promise = require('es6-promise').Promise
 import * as templates from './templates.js'
 
 var etsy_key = `wefcxmyls4vtcub1b50im5a1`,
-    etsy_url = (id) => `https://openapi.etsy.com/v2/listings/${id}.js?api_key=${etsy_key}&includes=Images&callback=?`,
-    details_url = (id) => `https://openapi.etsy.com/v2/listings/${id}.js?api_key=${etsy_key}&callback=?`
+    etsy_url = (id) => `https://openapi.etsy.com/v2/listings/${id}.js?api_key=${etsy_key}&includes=Images&callback=?`
 
 var EtsyRouter = backbone.Router.extend({
-    initialize() {
-            this.active_listings = new EtsyCollection()
-            backbone.history.start()
-            this.active_listings.fetch()
-        },
-        routes: {
-            'details/:objid': 'details',
-            '*anything': 'home'
-        },
-        home: function() {
-            var active_listings_view = new ActiveListingsView({
-                collection: this.active_listings
-            })
-            active_listings_view.render()
-        },
-        details: function(objid) {
-            var current_item = this.active_listings.get(objid)
-            var current_index = this.active_listings.indexOf(current_item)
-            var current_detailed_view = new DetailedView({model: current_item
-            })
-            current_item.fetch().then((data) => console.log(data))
-        }
+    initialize: function() {
+        this.active_listings = new EtsyCollection()
+        backbone.history.start()
+        this.active_listings.fetch()
+    },
+    routes: {
+        'details/:objid': 'details',
+        '*anything': 'home'
+    },
+    home: function() {
+        var active_listings_view = new ActiveListingsView({
+            collection: this.active_listings
+        })
+        active_listings_view.render()
+    },
+    details: function(objid) {
+        this.current_item = this.active_listings.get(objid);
+        this.current_index = this.active_listings.indexOf(this.current_item);
+        this.current_detailed_view = new DetailedView({
+            model: this.current_item
+        }),
+        this.current_detailed_view.render()
+    }
 })
 var EtsyModel = backbone.Model.extend({
-    initialize: function() {
-
-    },
+    initialize: function() {},
     idAttribute: 'listing_id',
     url: function() {
         return details_url(this.id)
@@ -76,13 +75,6 @@ var ActiveListingsView = backbone.View.extend({
 
 var DetailedView = backbone.View.extend({
     el: '.page',
-    initialize: function() {
-        this.listenTo(this.model, "sync", this.render)
-        this.listenTo(this.model, "request", this.loader)
-    },
-    loader: function() {
-        this.el.innerHTML = "<p>... loading</p>"
-    },
     template: function(obj) {
         return templates.detailedView(obj)
     },

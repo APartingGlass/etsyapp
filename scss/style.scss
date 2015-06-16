@@ -89,4 +89,20 @@ img {
 /**
  * YOUR CODE HERE
  */
+.toolbar {
+    width: cover;
+    padding: 1rem;
+    background: grey;
+    border: 1px solid black;
+    margin-bottom: 1.5rem;
+}
 
+
+.item {
+    text-align: center;
+    & >img {
+        max-width: 150px;
+        max-height: 150px;
+        float: left;
+    }
+}
