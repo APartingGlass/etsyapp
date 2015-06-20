@@ -2,17 +2,18 @@
 require("es5-shim")
 require("babel/register")
 var $ = require('jquery')
-var backbone = require('backbone')
+var Backbone = require('backbone')
+var React = require('react')
 var Promise = require('es6-promise').Promise
 import * as templates from './templates.js'
 
 var etsy_key = `wefcxmyls4vtcub1b50im5a1`,
     etsy_url = (id) => `https://openapi.etsy.com/v2/listings/${id}.js?api_key=${etsy_key}&includes=Images&callback=?`
 
-var EtsyRouter = backbone.Router.extend({
+var EtsyRouter = Backbone.Router.extend({
     initialize: function() {
         this.active_listings = new EtsyCollection()
-        backbone.history.start()
+        Backbone.history.start()
         this.active_listings.fetch()
     },
     routes: {
@@ -34,7 +35,7 @@ var EtsyRouter = backbone.Router.extend({
         this.current_detailed_view.render()
     }
 })
-var EtsyModel = backbone.Model.extend({
+var EtsyModel = Backbone.Model.extend({
     initialize: function() {},
     idAttribute: 'listing_id',
     url: function() {
@@ -42,7 +43,7 @@ var EtsyModel = backbone.Model.extend({
     }
 })
 
-var EtsyCollection = backbone.Collection.extend({
+var EtsyCollection = Backbone.Collection.extend({
         model: EtsyModel,
         initialize: function() {},
         url: function() {
@@ -55,14 +56,15 @@ var EtsyCollection = backbone.Collection.extend({
     })
     // // View
 
-var ActiveListingsView = backbone.View.extend({
+var ActiveListingsView = Backbone.View.extend({
     el: '.page',
     initialize: function() {
         this.listenTo(this.collection, "sync", this.render)
         this.listenTo(this.collection, "request", this.loader)
     },
     loader: function() {
-        this.el.innerHTML = "<p>... loading</p>"
+        this.el.innerHTML = "<img class='logo' src='../Images/etsy3.svg' /><img class='mag' src='../Images/magnifying47.svg' />"
+        debugger
     },
     template: function(arr) {
         return templates.homeview(arr)
@@ -73,7 +75,7 @@ var ActiveListingsView = backbone.View.extend({
     }
 })
 
-var DetailedView = backbone.View.extend({
+var DetailedView = Backbone.View.extend({
     el: '.page',
     template: function(obj) {
         return templates.detailedView(obj)

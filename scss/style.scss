@@ -89,14 +89,28 @@ img {
 /**
  * YOUR CODE HERE
  */
+$etsyOrange: rgb(243, 77, 0);
+$etsyEgg: rgb(244,244,238);
+
+.container {
+    background-color: $etsyEgg;
+}
+
 .toolbar {
     width: cover;
     padding: 1rem;
-    background: grey;
+    background-color: $etsyOrange;
     border: 1px solid black;
     margin-bottom: 1.5rem;
+    opacity: 0.75;
+    transition: all 0.5s ease;
+    &:hover {
+        opacity: 1;
+    }
+    input {
+        background-color: $etsyEgg;
+    }
 }
-
 
 .item {
     text-align: center;
@@ -105,4 +119,10 @@ img {
         max-height: 150px;
         float: left;
     }
+}
+
+.mag .logo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
 }
